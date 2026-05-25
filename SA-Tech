@@ -1,0 +1,6 @@
+git clone https://github.com/YOUR-USERNAME/my-website.git
+cd my-website
+# Copy your v0.app files here
+git add .
+git commit -m "Initial commit"
+git push origin main
