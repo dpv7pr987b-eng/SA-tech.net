@@ -1,1 +1,189 @@
-sa-tech.net
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SA-TECH.NET</title>
+    <style>
+        /* --- Base & Reset Rules --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #0d0f12;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- Welcome Animation Overlay --- */
+        #welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, #14191f 0%, #07090c 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s;
+            overflow: hidden;
+        }
+
+        /* Subtle Cyber Tech Grid Background Matrix */
+        #welcome-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 255, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 170, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            background-position: center;
+            pointer-events: none;
+        }
+
+        /* Laser Scan Line Effect */
+        .scan-line {
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #00ffaa, transparent);
+            box-shadow: 0 0 15px #00ffaa, 0 0 30px #00ffaa;
+            animation: scan 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes scan {
+            0% { top: -5%; }
+            50% { top: 105%; }
+            100% { top: 105%; }
+        }
+
+        /* --- Text Styling & Glow --- */
+        .brand-container {
+            position: relative;
+            text-align: center;
+            letter-spacing: 0.5rem;
+            padding: 20px;
+        }
+
+        .animated-text {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(0, 255, 170, 0.3);
+            display: inline-block;
+        }
+
+        .animated-text span {
+            color: #00ffaa; /* Neon cyber accent color */
+            text-shadow: 0 0 10px #00ffaa, 0 0 20px rgba(0, 255, 170, 0.5);
+        }
+
+        /* --- Main Website Container Placeholder --- */
+        #main-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+            padding: 40px;
+            text-align: center;
+            color: #ffffff;
+            margin-top: 20vh;
+        }
+
+        #main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. The Welcome Splash Overlay -->
+    <div id="welcome-overlay">
+        <div class="scan-line"></div>
+        <div class="brand-container">
+            <!-- JavaScript will process the target string securely inside this tag -->
+            <h1 id="scramble-text" class="animated-text">SA-TECH.NET</h1>
+        </div>
+    </div>
+
+    <!-- 2. Your Actual Website Content -->
+    <div id="main-content">
+        <h2>Welcome to SA-TECH.NET</h2>
+        <p>Secured infrastructure and next-generation systems initialized successfully.</p>
+    </div>
+
+    <!-- 3. Secure Vanilla JS Animation Core Engine -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const textElement = document.getElementById("scramble-text");
+            const rawTarget = textElement.textContent.trim();
+            
+            // Hardcoded characters dictionary to defend against arbitrary text injections
+            const allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-";
+            
+            // Re-render target text safely using DOM fragments rather than innerHTML string evaluations
+            textElement.textContent = "";
+            const textArray = rawTarget.split("");
+            
+            const spanWrappers = textArray.map(char => {
+                const el = document.createElement("span");
+                el.textContent = allowedChars[Math.floor(Math.random() * allowedChars.length)];
+                textElement.appendChild(el);
+                return { element: el, targetChar: char };
+            });
+
+            let frame = 0;
+            const totalCycles = 12; // Scramble variations per character
+
+            function decodeMatrixAnimation() {
+                let fullyDecoded = true;
+
+                spanWrappers.forEach((item, index) => {
+                    // Stagger the letter completion from left to right
+                    if (frame > index * 3) {
+                        item.element.textContent = item.targetChar;
+                        // Strip the neon color accent once the character locks in place
+                        if (item.targetChar !== '.' && item.targetChar !== '-') {
+                            item.element.style.color = '#ffffff';
+                            item.element.style.textShadow = 'none';
+                        }
+                    } else {
+                        // Keep shuffling randomized bytes securely
+                        item.element.textContent = allowedChars[Math.floor(Math.random() * allowedChars.length)];
+                        fullyDecoded = false;
+                    }
+                });
+
+                if (!fullyDecoded) {
+                    frame++;
+                    requestAnimationFrame(decodeMatrixAnimation);
+                } else {
+                    // Once animation finishes, cleanly dismantle the overlay screen
+                    setTimeout(() => {
+                        const overlay = document.getElementById("welcome-overlay");
+                        overlay.style.opacity = "0";
+                        overlay.style.visibility = "hidden";
+                        
+                        // Seamlessly transition the true landing view into perspective
+                        document.getElementById("main-content").classList.add("visible");
+                    }, 800);
+                }
+            }
+
+            // Fire up animation sequence matching monitor's refresh cycles 
+            setTimeout(() => {
+                requestAnimationFrame(decodeMatrixAnimation);
+            }, 300);
+        });
+    </script>
+</body>
+</html>
